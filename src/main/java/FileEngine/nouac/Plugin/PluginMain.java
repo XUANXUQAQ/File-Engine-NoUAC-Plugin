@@ -72,10 +72,23 @@ public class PluginMain extends Plugin {
             ProgramConfigs.INSTANCE.openConfigDir();
         } else if (">relaunch".equals(text)) {
             hideSearchBar();
-            ProgramConfigs.INSTANCE.openAllPrograms();
+            try {
+                ProgramConfigs.INSTANCE.openAllPrograms();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
-            addToResultQueue(">set");
-            addToResultQueue(">relaunch");
+            if (text != null && text.length() > 1) {
+                text = text.substring(1);
+                if ("set".startsWith(text)) {
+                    addToResultQueue(">set");
+                } else if ("relaunch".startsWith(text)) {
+                    addToResultQueue(">relaunch");
+                }
+            } else {
+                addToResultQueue(">set");
+                addToResultQueue(">relaunch");
+            }
         }
     }
 
@@ -90,7 +103,6 @@ public class PluginMain extends Plugin {
             labelChosenColor = new Color((Integer) configs.get("labelColor"));
             labelDefaultFontColor = new Color((Integer) configs.get("fontColor"));
             labelChosenFontColor = new Color((Integer) configs.get("fontColorWithCoverage"));
-            ProgramConfigs.INSTANCE.init();
             ProgramConfigs.INSTANCE.openAllPrograms();
         } catch (IOException e) {
             String message = "message: " + e.getMessage();
@@ -150,7 +162,11 @@ public class PluginMain extends Plugin {
                 ProgramConfigs.INSTANCE.openConfigDir();
             } else if (">relaunch".equals(result)) {
                 hideSearchBar();
-                ProgramConfigs.INSTANCE.openAllPrograms();
+                try {
+                    ProgramConfigs.INSTANCE.openAllPrograms();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -290,6 +306,11 @@ public class PluginMain extends Plugin {
         String defaultFontColor = "#" + ColorUtils.parseColorHex(labelDefaultFontColor);
         String fontColorHighLight = "#" + ColorUtils.parseColorHex(labelChosenFontColor);
         String html = "<html><body><span%s>%s</span></body></html>";
+        if (">set".equals(result)) {
+            result = result + "<br>" + "打开设置文件位置";
+        } else if (">relaunch".equals(result)) {
+            result = result + "<br>" + "重新打开所有程序（并不会关闭当前打开的程序）";
+        }
         html = String.format(html, String.format(" style=\"color: %s\"", isChosen ? fontColorHighLight : defaultFontColor), result);
         label.setText(html);
         if (isChosen) {

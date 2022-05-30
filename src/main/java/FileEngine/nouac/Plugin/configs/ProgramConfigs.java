@@ -31,7 +31,8 @@ public enum ProgramConfigs {
     private static final String savePath = "plugins/Plugin configuration files/NoUAC/settings.json";
     private final ArrayList<LaunchWrapper> programs = new ArrayList<>();
 
-    public void openAllPrograms() {
+    public void openAllPrograms() throws IOException {
+        init();
         programs.forEach(launchWrapper -> OpenUtils.openWithAdmin(launchWrapper.path, launchWrapper.workingDir, launchWrapper.params));
     }
 
@@ -44,7 +45,7 @@ public enum ProgramConfigs {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void init() throws IOException {
+    private void init() throws IOException {
         Path _savePath = Path.of(savePath);
         if (!Files.exists(_savePath)) {
             Files.createDirectories(Path.of(_savePath.getParent().toAbsolutePath().toString()));
@@ -59,6 +60,7 @@ public enum ProgramConfigs {
             }
             List list = gson.fromJson(sb.toString(), List.class);
             if (list != null) {
+                programs.clear();
                 list.forEach(each -> {
                     Map<String, String> tmp = (Map<String, String>) each;
                     String path = tmp.get("path");

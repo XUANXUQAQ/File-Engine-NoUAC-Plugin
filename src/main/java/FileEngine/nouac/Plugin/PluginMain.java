@@ -1,12 +1,27 @@
-package FileEngine.Example.Plugin;
+package FileEngine.nouac.Plugin;
+
+import FileEngine.nouac.Plugin.configs.ProgramConfigs;
+import FileEngine.nouac.Plugin.utils.ColorUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class PluginMain extends Plugin {
+
+    private Color backgroundColor;
+    private Color labelChosenColor;
+    private Color labelDefaultFontColor;
+    private Color labelChosenFontColor;
+
+    private void hideSearchBar() {
+        sendEventToFileEngine("file.engine.event.handler.impl.frame.searchBar.HideSearchBarEvent");
+    }
 
     /**
      * Deprecated
@@ -39,7 +54,10 @@ public class PluginMain extends Plugin {
      */
     @Override
     public void configsChanged(Map<String, Object> configs) {
-
+        backgroundColor = new Color((Integer) configs.get("defaultBackground"));
+        labelChosenColor = new Color((Integer) configs.get("labelColor"));
+        labelDefaultFontColor = new Color((Integer) configs.get("fontColor"));
+        labelChosenFontColor = new Color((Integer) configs.get("fontColorWithCoverage"));
     }
 
     /**
@@ -49,7 +67,16 @@ public class PluginMain extends Plugin {
      */
     @Override
     public void textChanged(String text) {
-
+        if (">set".equals(text)) {
+            hideSearchBar();
+            ProgramConfigs.INSTANCE.openConfigDir();
+        } else if (">relaunch".equals(text)) {
+            hideSearchBar();
+            ProgramConfigs.INSTANCE.openAllPrograms();
+        } else {
+            addToResultQueue(">set");
+            addToResultQueue(">relaunch");
+        }
     }
 
     /**
@@ -58,7 +85,20 @@ public class PluginMain extends Plugin {
      */
     @Override
     public void loadPlugin(Map<String, Object> configs) {
-
+        try {
+            backgroundColor = new Color((Integer) configs.get("defaultBackground"));
+            labelChosenColor = new Color((Integer) configs.get("labelColor"));
+            labelDefaultFontColor = new Color((Integer) configs.get("fontColor"));
+            labelChosenFontColor = new Color((Integer) configs.get("fontColorWithCoverage"));
+            ProgramConfigs.INSTANCE.init();
+            ProgramConfigs.INSTANCE.openAllPrograms();
+        } catch (IOException e) {
+            String message = "message: " + e.getMessage();
+            String cause = "cause: " + e.getCause();
+            System.out.println("-----------------------NoUAC plugin init error------------------------------\n" + message +
+                    "\n" + cause + "-----------------------NoUAC plugin init error------------------------------");
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -104,7 +144,15 @@ public class PluginMain extends Plugin {
      */
     @Override
     public void keyPressed(KeyEvent e, String result) {
-
+        if (e.getKeyCode() == 10) {
+            if (">set".equals(result)) {
+                hideSearchBar();
+                ProgramConfigs.INSTANCE.openConfigDir();
+            } else if (">relaunch".equals(result)) {
+                hideSearchBar();
+                ProgramConfigs.INSTANCE.openAllPrograms();
+            }
+        }
     }
 
     /**
@@ -154,7 +202,7 @@ public class PluginMain extends Plugin {
      */
     @Override
     public ImageIcon getPluginIcon() {
-        return null;
+        return new ImageIcon(Objects.requireNonNull(PluginMain.class.getResource("/icon.png")));
     }
 
     /**
@@ -164,7 +212,7 @@ public class PluginMain extends Plugin {
      */
     @Override
     public String getOfficialSite() {
-        return null;
+        return "";
     }
 
     /**
@@ -174,7 +222,7 @@ public class PluginMain extends Plugin {
      */
     @Override
     public String getVersion() {
-        return null;
+        return "1.0";
     }
 
     /**
@@ -185,7 +233,22 @@ public class PluginMain extends Plugin {
      */
     @Override
     public String getDescription() {
-        return null;
+        return "一个用于避免弹出UAC弹窗的插件，添加所需启动程序后，程序将在插件被加载时启动\n" +
+                "使用方法：\n" +
+                "在输入框中输入\t\">nouac >set\"\t进入设置文件夹\n" +
+                "然后编辑settings.json\n" +
+                "在settings.json中输入你想要以管理员方式自启动的程序\n" +
+                "settings.json中存放的是数组\n" +
+                "\n" +
+                "例子：\n" +
+                "[\n" +
+                "  {\n" +
+                "    \"path\": \"Your executable file path.\",\n" +
+                "    \"workingDir\": \"working directory.\",\n" +
+                "    \"params\": \"console params.\"\n" +
+                "  }\n" +
+                "]\n" +
+                "输入\t\">nouac >relaunch\"\t尝试重新启动所有程序";
     }
 
     /**
@@ -197,7 +260,7 @@ public class PluginMain extends Plugin {
     @Override
     @SuppressWarnings({"unused", "RedundantThrows"})
     public boolean isLatest() throws Exception {
-        return false;
+        return true;
     }
 
     /**
@@ -224,12 +287,21 @@ public class PluginMain extends Plugin {
      */
     @Override
     public void showResultOnLabel(String result, JLabel label, boolean isChosen) {
-
+        String defaultFontColor = "#" + ColorUtils.parseColorHex(labelDefaultFontColor);
+        String fontColorHighLight = "#" + ColorUtils.parseColorHex(labelChosenFontColor);
+        String html = "<html><body><span%s>%s</span></body></html>";
+        html = String.format(html, String.format(" style=\"color: %s\"", isChosen ? fontColorHighLight : defaultFontColor), result);
+        label.setText(html);
+        if (isChosen) {
+            label.setBackground(labelChosenColor);
+        } else {
+            label.setBackground(backgroundColor);
+        }
     }
 
     @Override
     public String getAuthor() {
-        return null;
+        return "XUANXU";
     }
 
 
@@ -326,8 +398,9 @@ public class PluginMain extends Plugin {
 
     /**
      * Do Not Remove, this is used for File-Engine to restore the handler which the plugin is registered.
-     * @see #restoreFileEngineEventHandler(String)
+     *
      * @return Event class fully-qualified name
+     * @see #restoreFileEngineEventHandler(String)
      */
     @SuppressWarnings("unused")
     public String restoreFileEngineEventHandler() {

@@ -84,6 +84,9 @@ public class PluginMain extends Plugin {
                     addToResultQueue(">set");
                 } else if ("relaunch".startsWith(text)) {
                     addToResultQueue(">relaunch");
+                } else {
+                    addToResultQueue(">set");
+                    addToResultQueue(">relaunch");
                 }
             } else {
                 addToResultQueue(">set");

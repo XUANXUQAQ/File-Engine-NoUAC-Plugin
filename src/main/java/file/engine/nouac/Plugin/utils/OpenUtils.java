@@ -1,4 +1,4 @@
-package FileEngine.nouac.Plugin.utils;
+package file.engine.nouac.Plugin.utils;
 
 import java.io.File;
 import java.io.IOException;

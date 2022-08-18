@@ -1,5 +1,5 @@
 {
-  "className" : "FileEngine.nouac.Plugin.PluginMain",
+  "className" : "file.engine.nouac.Plugin.PluginMain",
   "identifier" : "nouac",
   "name" : "NoUAC"
 }

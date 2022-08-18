@@ -1,4 +1,4 @@
-package FileEngine.nouac.Plugin;
+package file.engine.nouac.Plugin;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

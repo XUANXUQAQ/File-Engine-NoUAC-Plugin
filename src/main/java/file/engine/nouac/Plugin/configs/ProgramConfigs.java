@@ -1,8 +1,8 @@
-package FileEngine.nouac.Plugin.configs;
+package file.engine.nouac.Plugin.configs;
 
 
-import FileEngine.nouac.Plugin.utils.OpenUtils;
-import FileEngine.nouac.Plugin.utils.gson.GsonUtil;
+import file.engine.nouac.Plugin.utils.OpenUtils;
+import file.engine.nouac.Plugin.utils.gson.GsonUtil;
 import com.google.gson.Gson;
 
 import java.io.*;

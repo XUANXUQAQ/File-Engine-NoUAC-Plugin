@@ -1,4 +1,4 @@
-package FileEngine.nouac.Plugin;
+package file.engine.nouac.Plugin;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;

@@ -1,7 +1,7 @@
-package FileEngine.nouac.Plugin;
+package file.engine.nouac.Plugin;
 
-import FileEngine.nouac.Plugin.configs.ProgramConfigs;
-import FileEngine.nouac.Plugin.utils.ColorUtils;
+import file.engine.nouac.Plugin.configs.ProgramConfigs;
+import file.engine.nouac.Plugin.utils.ColorUtils;
 
 import javax.swing.*;
 import java.awt.*;

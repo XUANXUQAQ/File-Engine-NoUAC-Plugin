@@ -1,4 +1,4 @@
-package FileEngine.nouac.Plugin.utils.gson;
+package file.engine.nouac.Plugin.utils.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

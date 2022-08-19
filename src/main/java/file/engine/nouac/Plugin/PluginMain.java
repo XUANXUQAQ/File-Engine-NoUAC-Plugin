@@ -252,7 +252,8 @@ public class PluginMain extends Plugin {
      */
     @Override
     public String getDescription() {
-        return "一个用于避免弹出UAC弹窗的插件，添加所需启动程序后，程序将在插件被加载时启动\n" +
+        String template = "<html><body>%s</body></html>";
+        return String.format(template, "一个用于避免弹出UAC弹窗的插件，添加所需启动程序后，程序将在插件被加载时启动\n" +
                 "使用方法：\n" +
                 "在输入框中输入\t\">nouac >set\"\t进入设置文件夹\n" +
                 "然后编辑settings.json\n" +
@@ -267,7 +268,8 @@ public class PluginMain extends Plugin {
                 "    \"params\": \"console params.\"\n" +
                 "  }\n" +
                 "]\n" +
-                "输入\t\">nouac >relaunch\"\t尝试重新启动所有程序";
+                "输入\t\">nouac >relaunch\"\t尝试重新启动所有程序" +
+                "\n图标来自：<a target=\"_blank\" href=\"https://icons8.com/icon/103947/删除盾\">删除盾</a> icon by <a target=\"_blank\" href=\"https://icons8.com\">Icons8</a>");
     }
 
     /**

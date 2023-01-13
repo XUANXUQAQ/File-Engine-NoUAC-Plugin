@@ -252,23 +252,24 @@ public class PluginMain extends Plugin {
      */
     @Override
     public String getDescription() {
-        return "一个用于避免弹出UAC弹窗的插件，添加所需启动程序后，程序将在插件被加载时启动\n" +
-                "使用方法：\n" +
-                "在输入框中输入\t\">nouac >set\"\t进入设置文件夹\n" +
-                "然后编辑settings.json\n" +
-                "在settings.json中输入你想要以管理员方式自启动的程序\n" +
-                "settings.json中存放的是数组\n" +
-                "\n" +
-                "例子：\n" +
-                "[\n" +
-                "  {\n" +
-                "    \"path\": \"Your executable file path.\",\n" +
-                "    \"workingDir\": \"working directory.\",\n" +
-                "    \"params\": \"console params.\"\n" +
-                "  }\n" +
-                "]\n" +
-                "输入\t\">nouac >relaunch\"\t尝试重新启动所有程序" +
-                "\n图标来自： https://icons8.com/icon/103947/删除盾 icon by https://icons8.com";
+        return """
+                一个用于避免弹出UAC弹窗的插件，添加所需启动程序后，程序将在插件被加载时启动
+                使用方法：
+                在输入框中输入\t">nouac >set"\t进入设置文件夹
+                然后编辑settings.json
+                在settings.json中输入你想要以管理员方式自启动的程序
+                settings.json中存放的是数组
+
+                例子：
+                [
+                  {
+                    "path": "Your executable file path.",
+                    "workingDir": "working directory.",
+                    "params": "console params."
+                  }
+                ]
+                输入\t">nouac >relaunch"\t尝试重新启动所有程序
+                图标来自： https://icons8.com/icon/103947/删除盾 icon by https://icons8.com""";
     }
 
     /**

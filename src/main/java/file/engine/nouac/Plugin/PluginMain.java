@@ -265,7 +265,8 @@ public class PluginMain extends Plugin {
                   {
                     "path": "Your executable file path.",
                     "workingDir": "working directory.",
-                    "params": "console params."
+                    "params": "console params.",
+                    "checkExeName": "check exe process name."
                   }
                 ]
                 输入\t">nouac >relaunch"\t尝试重新启动所有程序

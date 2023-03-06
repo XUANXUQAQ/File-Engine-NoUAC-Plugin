@@ -17,14 +17,16 @@ public enum ProgramConfigs {
     INSTANCE;
 
     public static class LaunchWrapper {
-        private final String path;
-        private final String workingDir;
-        private final String params;
+        public final String path;
+        public final String workingDir;
+        public final String params;
+        public final String checkExeName;
 
-        private LaunchWrapper(String path, String workingDir, String params) {
+        private LaunchWrapper(String path, String workingDir, String params, String checkExeName) {
             this.path = path;
             this.workingDir = workingDir;
             this.params = params;
+            this.checkExeName = checkExeName;
         }
     }
 
@@ -33,7 +35,7 @@ public enum ProgramConfigs {
 
     public void openAllPrograms() throws IOException {
         init();
-        programs.forEach(launchWrapper -> OpenUtils.openWithAdmin(launchWrapper.path, launchWrapper.workingDir, launchWrapper.params));
+        programs.forEach(OpenUtils::openWithAdmin);
     }
 
     public void openConfigDir() {
@@ -66,7 +68,8 @@ public enum ProgramConfigs {
                     String path = tmp.get("path");
                     String workingDir = tmp.get("workingDir");
                     String params = tmp.get("params");
-                    LaunchWrapper launchWrapper = new LaunchWrapper(path, workingDir, params);
+                    String checkExeName = tmp.get("checkExeName");
+                    LaunchWrapper launchWrapper = new LaunchWrapper(path, workingDir, params, checkExeName);
                     programs.add(launchWrapper);
                 });
             }

@@ -2,6 +2,7 @@ package file.engine.nouac.Plugin;
 
 import file.engine.nouac.Plugin.configs.ProgramConfigs;
 import file.engine.nouac.Plugin.utils.ColorUtils;
+import file.engine.nouac.Plugin.utils.VersionUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -241,7 +242,7 @@ public class PluginMain extends Plugin {
      */
     @Override
     public String getVersion() {
-        return "1.0";
+        return VersionUtil._getPluginVersion();
     }
 
     /**
@@ -282,7 +283,7 @@ public class PluginMain extends Plugin {
     @Override
     @SuppressWarnings({"unused", "RedundantThrows"})
     public boolean isLatest() throws Exception {
-        return true;
+        return VersionUtil._isLatest();
     }
 
     /**
@@ -294,7 +295,7 @@ public class PluginMain extends Plugin {
      */
     @Override
     public String getUpdateURL() {
-        return null;
+        return VersionUtil._getUpdateURL();
     }
 
     /**

@@ -36,9 +36,9 @@ public class OpenUtils {
      * @param launchWrapper 需要打开的文件
      */
     public static void openWithAdmin(ProgramConfigs.LaunchWrapper launchWrapper) {
-        if (!(launchWrapper.checkExeName == null || launchWrapper.checkExeName.isEmpty())) {
+        if (!((launchWrapper.checkExeName == null) || launchWrapper.checkExeName.isEmpty())) {
             try {
-                if (isProcessExist(launchWrapper.checkExeName)){
+                if (isProcessExist(launchWrapper.checkExeName)) {
                     return;
                 }
             } catch (IOException | InterruptedException e) {
@@ -47,6 +47,10 @@ public class OpenUtils {
             }
         }
         File file = new File(launchWrapper.path);
+        if (!file.exists()) {
+            System.out.println("NoUAC: File not exist");
+            return;
+        }
         if (file.isDirectory()) {
             try {
                 openFolderByExplorer(launchWrapper.path);
@@ -56,24 +60,20 @@ public class OpenUtils {
             }
             return;
         }
-        if (file.exists()) {
+        try {
+            String command = file.getAbsolutePath();
+            String start = "cmd.exe /c start " + command.substring(0, 2);
+            String end = "\"" + command.substring(2) + "\"";
+            String full = start + end + " " + launchWrapper.params;
+            Runtime.getRuntime().exec(full, null, new File(launchWrapper.workingDir));
+        } catch (IOException e) {
+            //打开上级文件夹
             try {
-                String command = file.getAbsolutePath();
-                String start = "cmd.exe /c start " + command.substring(0, 2);
-                String end = "\"" + command.substring(2) + "\"";
-                String full = start + end + " " + launchWrapper.params;
-                Runtime.getRuntime().exec(full, null, new File(launchWrapper.workingDir));
-            } catch (IOException e) {
-                //打开上级文件夹
-                try {
-                    openFolderByExplorer(file.getAbsolutePath());
-                } catch (IOException e1) {
-                    System.out.println("NoUAC: Execute failed");
-                    e.printStackTrace();
-                }
+                openFolderByExplorer(file.getAbsolutePath());
+            } catch (IOException e1) {
+                System.out.println("NoUAC: Execute failed");
+                e.printStackTrace();
             }
-        } else {
-            System.out.println("NoUAC: File not exist");
         }
     }
 }

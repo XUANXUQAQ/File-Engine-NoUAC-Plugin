@@ -25,30 +25,6 @@ public class PluginMain extends Plugin {
     }
 
     /**
-     * Deprecated
-     * You should load the theme by loadPlugin and update the theme by configsChanged
-     *
-     * @param defaultColor    This is the color's RGB code. When the label isn't chosen, it will be shown as this color.
-     * @param choseLabelColor This is the color's RGB code. When the label is chosen, it will be shown as this color.
-     * @param borderColor     This is the border color of File-Engine, it is deprecated, you should not set labels' border in plugin.
-     *                        However, you can still know the border color through this parameter.
-     * @see #loadPlugin(Map)
-     * @see #configsChanged(Map)
-     * This is used for File-Engine to tell the plugin the current Theme settings.
-     * This function will be called when the plugin is being loaded.
-     * You can use them on method showResultOnLabel(String, JLabel, boolean).
-     * When the label is chosen by user, you could set the label background as chosenLabelColor.
-     * When the label isn't chosen by user, you could set the label background as defaultColor.
-     * You can save the color and use it at function showResultOnLabel(String, JLabel, boolean)
-     * @see #showResultOnLabel(String, JLabel, boolean)
-     */
-    @Override
-    @Deprecated
-    public void setCurrentTheme(int defaultColor, int choseLabelColor, int borderColor) {
-
-    }
-
-    /**
      * When the configuration file of File-Engine is updated, this function will be called.
      *
      * @param configs configs
@@ -103,6 +79,7 @@ public class PluginMain extends Plugin {
     @Override
     public void loadPlugin(Map<String, Object> configs) {
         try {
+            VersionUtil.registerDownloadListener();
             backgroundColor = new Color((Integer) configs.get("defaultBackground"));
             labelChosenColor = new Color((Integer) configs.get("labelColor"));
             labelDefaultFontColor = new Color((Integer) configs.get("fontColor"));
@@ -114,21 +91,9 @@ public class PluginMain extends Plugin {
             System.out.println("-----------------------NoUAC plugin init error------------------------------\n" + message +
                     "\n" + cause + "-----------------------NoUAC plugin init error------------------------------");
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Deprecated
-     * You should use loadPlugin with configs
-     *
-     * @see #loadPlugin(Map)
-     * When File-Engine is starting, the function will be called.
-     * You can initialize your plugin here
-     */
-    @Override
-    @Deprecated
-    public void loadPlugin() {
-
     }
 
     /**
@@ -433,5 +398,28 @@ public class PluginMain extends Plugin {
     @SuppressWarnings("unused")
     public String restoreFileEngineEventHandler() {
         return _pollFromRestoreQueue();
+    }
+
+    /**
+     * Do Not Remove, this is used for File-Engine to add an event listener for this plugin.
+     * The object array contains two parts.
+     * object[0] contains the fully-qualified name of class.
+     * object[1] contains a consumer to execute when the event is finished.
+     *
+     * @return Event listener
+     */
+    @SuppressWarnings("unused")
+    public Object[] pollFromEventListenerQueue() {
+        return _pollFromEventListenerQueue();
+    }
+
+    /**
+     * Do Not Remove, this is used to remove a plugin registered event listener.
+     *
+     * @return Event class fully-qualified name
+     */
+    @SuppressWarnings("unused")
+    public String[] removeFileEngineEventListener() {
+        return _pollFromRemoveListenerQueue();
     }
 }

@@ -312,6 +312,11 @@ public class PluginMain extends Plugin {
 
     }
 
+    @Override
+    public void openSettings() {
+        ProgramConfigs.INSTANCE.openConfigDir();
+    }
+
     //--------------------------------------------------------------------------------------------------------------
 
     /**
